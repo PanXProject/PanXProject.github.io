@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500" role="img" aria-label="PanX mark">
+  <!-- P: stem and bowl -->
+  <path fill="#1D1447" d="M82 78h78v167H82z M82 78h75a80 68 0 0 1 0 136h-75z"/>
+  <!-- A: triangle -->
+  <path fill="#FE2E4C" d="M222 240 L320 72 L418 240 Z"/>
+  <!-- N: square with a diagonal notch -->
+  <path fill="#FBD67E" d="M82 258 L160 312 L160 258 L222 258 L222 418 L82 418 Z"/>
+  <!-- X: hourglass -->
+  <path fill="#2F99B0" d="M242 258 L410 258 L352 338 L410 418 L242 418 L300 338 Z"/>
+</svg>
