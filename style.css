@@ -19,14 +19,14 @@
     --bg: #0A0A0A; --ink: #F5F5F5; --ink-2: #BDBDBD; --mute: #8A8A8A;
     --line: rgba(255,255,255,.16); --line-2: rgba(255,255,255,.09); --pill: #F5F5F5; --pill-ink: #0A0A0A;
     --logo-filter: brightness(0) invert(1) opacity(.6);
-    --glass-ink: #FFFFFF; --glass-blend: screen; --glass-ambient: .09; --glass-light: 1; --glass-dark: 0;
+    --glass-ink: #FFFFFF; --glass-blend: screen; --glass-ambient: .09; --glass-light: 1; --glass-dark: 0; --glass-glint: .9;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0A0A0A; --ink: #F5F5F5; --ink-2: #BDBDBD; --mute: #8A8A8A;
   --line: rgba(255,255,255,.16); --line-2: rgba(255,255,255,.09); --pill: #F5F5F5; --pill-ink: #0A0A0A;
   --logo-filter: brightness(0) invert(1) opacity(.6);
-  --glass-ink: #FFFFFF; --glass-blend: screen; --glass-ambient: .09; --glass-light: 1; --glass-dark: 0;
+  --glass-ink: #FFFFFF; --glass-blend: screen; --glass-ambient: .09; --glass-light: 1; --glass-dark: 0; --glass-glint: .9;
 }
 
 * { box-sizing: border-box; }
@@ -157,6 +157,9 @@ footer nav { gap: 22px; font-size: 13.5px; color: var(--mute); }
 [data-glass] .rb { fill-opacity: calc(var(--glass-light) * (.34 * var(--spec) + .09 * var(--fres) * var(--diff)) + var(--glass-dark) * (.12 * var(--spec) + .05 * var(--fres) * var(--diff))); mix-blend-mode: var(--glass-blend); }
 [data-glass] .edge { fill: none; stroke: currentColor; stroke-opacity: calc(.06 + .22 * var(--fres) + .2 * var(--spec)); stroke-width: .9; stroke-linejoin: round; }
 @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+/* glimmer: a light band slides across the still About mark, CSS only */
+.glass-sm .glint { mix-blend-mode: var(--glass-blend); opacity: var(--glass-glint, .9); animation: glint 6.5s cubic-bezier(.45, 0, .2, 1) infinite; }
+@keyframes glint { 0%, 58% { transform: skewX(-20deg) translateX(0); } 100% { transform: skewX(-20deg) translateX(900px); } }
 /* the About mark is near face-on: clear faces, and the light breaks in the edges, each edge lit on its own
    (a white core with a warm and a cool fringe, strong where the light strikes it, gone where it does not) */
 .glass-sm .edge { stroke: currentColor; stroke-opacity: .08; stroke-width: .7; }
@@ -166,4 +169,4 @@ footer nav { gap: 22px; font-size: 13.5px; color: var(--mute); }
 .glass-sm .ec { stroke: var(--glass-ink); stroke-width: calc(.7px + 1.7px * var(--lit)); stroke-opacity: calc(var(--glass-light) * (.08 + .85 * var(--lit)) + var(--glass-dark) * (.05 + .2 * var(--lit))); }
 .glass-sm .ew { stroke: #FF7A4D; stroke-width: 1.3; stroke-opacity: calc(.75 * var(--lit)); mix-blend-mode: var(--glass-blend); }
 .glass-sm .ek { stroke: #4FC3FF; stroke-width: 1.3; stroke-opacity: calc(.75 * var(--lit)); mix-blend-mode: var(--glass-blend); }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .arrow::after, .feature, .glass svg { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .arrow::after, .feature, .glass svg, .glass-sm .glint { transition: none; animation: none; } }

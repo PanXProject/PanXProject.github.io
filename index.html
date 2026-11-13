@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=23">
 <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()</script>
 </head>
 <body>
@@ -180,7 +180,7 @@
     [["0","#ff5c7a"],[".2","#ffb24d"],[".4","#f7e85a"],[".6","#5de8a4"],[".8","#4fc6ff"],["1","#a98bff"]].forEach(function(st){ el("stop",{offset:st[0],"stop-color":st[1]},rb); });
     var glow=el("filter",{id:"glow-"+id,x:"-40%",y:"-40%",width:"180%",height:"180%"},defs); el("feGaussianBlur",{stdDeviation:28},glow);
     var amb=el("g",{"class":"ambient",filter:"url(#glow-"+id+")"},svg);
-    var world=el("g",{"class":"world"},svg), fx=el("g",{"class":"fx"},svg);
+    var world=el("g",{"class":"world"},svg), fx=el("g",{"class":"fx"},svg), glintClip=opts.glint?el("clipPath",{id:"glint-"+id},defs):null;
     var faces=[];
     SHAPES.forEach(function(sh){
       var ambPoly=el("polygon",{},amb);
@@ -191,11 +191,11 @@
         var f={verts:verts,g:g,tint:el("polygon",{"class":"tint"},g),spec:el("polygon",{"class":"spec"},g),rb:el("polygon",{"class":"rb",fill:"url(#rb-"+id+")"},g),edge:kind==="cap"?el("polygon",{"class":"edge"},g):null,amb:kind==="cap"?ambPoly:null};
         faces.push(f); return f;
       }
-      var ff=face(front,"cap"); face(back.slice().reverse(),"cap");
+      var ff=face(front,"cap"); face(back.slice().reverse(),"cap"); if(glintClip) ff.glint=el("polygon",{},glintClip);
       if(opts.edges){ ff.lines=[]; for(var e=0;e<n;e++) ff.lines.push({c:el("line",{"class":"ec"},fx),w:el("line",{"class":"ew"},fx),k:el("line",{"class":"ek"},fx)}); }
       for(var i=0;i<n;i++){ var j=(i+1)%n; face([front[i],front[j],back[j],back[i]],"side"); }
     });
-    var state={yaw:-.55,pitch:.2,lx:-.45,ly:-.6};
+    var state={yaw:-.55,pitch:.2,lx:-.45,ly:-.6}, lastOrder=null;
     function render(){
       var cy=Math.cos(state.yaw), sy=Math.sin(state.yaw), cp=Math.cos(state.pitch), sp=Math.sin(state.pitch);
       var L=norm([state.lx,state.ly,.75]), H=norm([L[0],L[1],L[2]+1]);
@@ -211,7 +211,7 @@
         var diff=Math.max(0,nrm[0]*L[0]+nrm[1]*L[1]+nrm[2]*L[2]), spec=Math.pow(Math.max(0,nrm[0]*H[0]+nrm[1]*H[1]+nrm[2]*H[2]),36), fres=Math.pow(1-nrm[2],2.2);
         var pts=P.map(function(q){return q[0].toFixed(1)+","+q[1].toFixed(1);}).join(" ");
         f.tint.setAttribute("points",pts); f.spec.setAttribute("points",pts); f.rb.setAttribute("points",pts);
-        if(f.edge) f.edge.setAttribute("points",pts); if(f.amb) f.amb.setAttribute("points",pts);
+        if(f.edge) f.edge.setAttribute("points",pts); if(f.amb) f.amb.setAttribute("points",pts); if(f.glint) f.glint.setAttribute("points",pts);
         var st=f.g.style; st.setProperty("--diff",diff.toFixed(3)); st.setProperty("--spec",spec.toFixed(3)); st.setProperty("--fres",fres.toFixed(3));
         if(f.lines){ /* per-edge light: a white core and a warm/cool fringe only where the light strikes the edge */
           var A2=0; for(var i=0;i<P.length;i++){ var q=P[i], r=P[(i+1)%P.length]; A2+=q[0]*r[1]-r[0]*q[1]; } var cw=A2>0;
@@ -223,18 +223,18 @@
           }
         }
       });
-      faces.sort(function(p,q){return p.z-q.z;}).forEach(function(f){ world.appendChild(f.g); });
+      faces.sort(function(p,q){return p.z-q.z;}); var order=faces.map(function(f){return f.g;}); var same=lastOrder&&order.every(function(g,i){return g===lastOrder[i];});
+      if(!same){ order.forEach(function(g){ world.appendChild(g); }); lastOrder=order; }
       rb.setAttribute("gradientTransform","rotate("+(state.yaw*120+35).toFixed(1)+" 250 250)");
     }
+    if(opts.glint){ var gg=el("g",{"clip-path":"url(#glint-"+id+")"},svg); var lg=el("linearGradient",{id:"glintg-"+id,x1:0,y1:0,x2:1,y2:0},defs); [[0,0],[.42,.22],[.5,.55],[.58,.22],[1,0]].forEach(function(st){ el("stop",{offset:st[0],"stop-color":"#fff","stop-opacity":st[1]},lg); }); el("rect",{"class":"glint",x:-200,y:-120,width:200,height:760,fill:"url(#glintg-"+id+")",transform:"skewX(-20)"},gg); }
     render();
     return {state:state,render:render};
   }
 
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches, hover=matchMedia("(hover: hover)").matches;
   var smallSvg=document.querySelector('[data-glass="small"]');
-  if(smallSvg){ var sm=build(smallSvg,"s",{edges:true,depth:96}); sm.state.yaw=.5; sm.state.pitch=.4; sm.state.lx=-.1; sm.state.ly=-.16; sm.render();
-    /* face-on: the light drifts slowly across the front so the spectrum moves through the glass */
-    if(!reduce){ (function drift(t){ sm.state.lx=-.2+Math.sin(t/3100)*.55; sm.state.ly=-.25+Math.cos(t/4100)*.45; sm.render(); requestAnimationFrame(drift); })(0); } }
+  if(smallSvg){ var sm=build(smallSvg,"s",{edges:true,depth:96,glint:true}); sm.state.yaw=.5; sm.state.pitch=.4; sm.state.lx=-.3; sm.state.ly=-.5; sm.render(); }   /* still; the glimmer is CSS */
   var heroSvg=document.querySelector('[data-glass="hero"]');
   if(heroSvg){
     var hero=document.querySelector(".hero"), g=build(heroSvg,"h");
