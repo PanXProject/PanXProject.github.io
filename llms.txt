@@ -1,0 +1,20 @@
+# PanX
+
+> PanX is Waleed Sadek's one-person product studio: small tools for problems people face alone, one at a time, since 2017. Founded in the UK as a consultancy, run from Egypt since, built in public.
+
+## What it makes
+
+- Tafadal (https://tafadal.app): an AI front desk for a small business website. A chat bubble that answers visitors from the owner's own text, in the visitor's language, at any hour, and takes a name and email when someone wants to book. Live, 2026.
+- Badge wall (on ToolSeekr): a ready-made "featured on" badge section for founders whose free directory listings require a badge. 2025.
+- ToolSeekr (https://toolseekr.com): a curated business-software directory in English and Arabic, built with indie makers. 2024.
+- awesome-certificates (https://panx.io/awesome-certificates/ and https://github.com/PanXProject/awesome-certificates): a community list of free courses that come with a certificate, nearly 6,000 GitHub stars. 2020.
+- Earlier: Xposure (multi-location Google Maps listings, 2022, retired), Hunt (a job search engine over many countries' boards, 2019), HireUps (hiring meetups, 2018).
+
+## Pages
+
+- https://panx.io/ : the studio, the work, the founder
+- https://panx.io/awesome-certificates/ : searchable free courses with certificates
+
+## Contact
+
+- yeah@panx.io
