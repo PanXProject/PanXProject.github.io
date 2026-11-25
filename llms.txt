@@ -4,7 +4,7 @@
 
 ## What it makes
 
-- Tafadal (https://tafadal.app): an AI front desk for a small business website. A chat bubble that answers visitors from the owner's own text, in the visitor's language, at any hour, and takes a name and email when someone wants to book. Live, 2026.
+- Tafadal (https://tafadal.app): an AI front desk and follow-up list for coaches and consultants who work alone. The website chat answers visitors from the owner's own text, in their language, at any hour. Everyone from the chat, email and bookings lands in one list; people selling rather than buying are moved aside, and each follow-up is drafted in the owner's words and sent only when they press send. Live, 2026.
 - Badge wall (on ToolSeekr): a ready-made "featured on" badge section for founders whose free directory listings require a badge. 2025.
 - ToolSeekr (https://toolseekr.com): a curated business-software directory in English and Arabic, built with indie makers. 2024.
 - awesome-certificates (https://panx.io/awesome-certificates/ and https://github.com/PanXProject/awesome-certificates): a community list of free courses that come with a certificate, nearly 6,000 GitHub stars. 2020.
